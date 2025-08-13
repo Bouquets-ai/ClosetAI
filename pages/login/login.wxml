@@ -1,0 +1,170 @@
+<view class="container">
+  <!-- 登录头部 -->
+  <view class="login-header">
+    <view class="logo">
+      <text class="logo-icon">👗</text>
+      <text class="logo-text">AI穿搭助手</text>
+    </view>
+    <view class="welcome-text">欢迎使用智能穿搭推荐</view>
+  </view>
+
+  <!-- 登录卡片 -->
+  <view class="card login-card">
+    <view class="login-title">登录账户</view>
+    
+    <!-- 微信登录 -->
+    <view class="login-methods">
+      <button class="btn wechat-login" 
+              open-type="getUserInfo" 
+              bindgetuserinfo="onGetUserInfo"
+              wx:if="{{!hasLogin}}">
+        <text class="login-icon">👤</text>
+        微信一键登录
+      </button>
+      
+      <!-- 已登录状态 -->
+      <view class="user-info" wx:if="{{hasLogin}}">
+        <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill" />
+        <view class="user-details">
+          <text class="nickname">{{userInfo.nickName}}</text>
+          <text class="login-status">已登录</text>
+        </view>
+        <button class="btn btn-outline logout-btn" bindtap="logout">退出登录</button>
+      </view>
+    </view>
+    
+    <!-- 登录说明 -->
+    <view class="login-desc" wx:if="{{!hasLogin}}">
+      <text class="desc-text">登录后可享受以下服务：</text>
+      <view class="feature-list">
+        <view class="feature-item">
+          <text class="feature-icon">🎨</text>
+          <text class="feature-text">每日10次AI穿搭分析</text>
+        </view>
+        <view class="feature-item">
+          <text class="feature-icon">📷</text>
+          <text class="feature-text">拍照识别服装颜色</text>
+        </view>
+        <view class="feature-item">
+          <text class="feature-icon">💡</text>
+          <text class="feature-text">个性化搭配建议</text>
+        </view>
+        <view class="feature-item">
+          <text class="feature-icon">📊</text>
+          <text class="feature-text">分析历史记录</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 使用统计 -->
+  <view class="card stats-card" wx:if="{{hasLogin}}">
+    <view class="stats-title">使用统计</view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-number">{{dailyCallCount}}</text>
+        <text class="stat-label">今日使用</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-number">{{maxDailyCalls - dailyCallCount}}</text>
+        <text class="stat-label">剩余次数</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-number">{{totalAnalysis}}</text>
+        <text class="stat-label">累计分析</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-number">{{loginDays}}</text>
+        <text class="stat-label">使用天数</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 个人设置 -->
+  <view class="card settings-card" wx:if="{{hasLogin}}">
+    <view class="settings-title">个人设置</view>
+    <view class="settings-list">
+      <view class="setting-item" bindtap="showBodyInfoModal">
+        <view class="setting-info">
+          <text class="setting-icon">👤</text>
+          <text class="setting-name">身材信息</text>
+        </view>
+        <view class="setting-value">
+          <text class="setting-text">{{bodyInfoText}}</text>
+          <text class="setting-arrow">›</text>
+        </view>
+      </view>
+      
+      <view class="setting-item" bindtap="showGenderModal">
+        <view class="setting-info">
+          <text class="setting-icon">⚧</text>
+          <text class="setting-name">性别偏好</text>
+        </view>
+        <view class="setting-value">
+          <text class="setting-text">{{genderMode === 'male' ? '男装' : '女装'}}</text>
+          <text class="setting-arrow">›</text>
+        </view>
+      </view>
+      
+      <view class="setting-item" bindtap="clearHistory">
+        <view class="setting-info">
+          <text class="setting-icon">🗑️</text>
+          <text class="setting-name">清除历史</text>
+        </view>
+        <view class="setting-value">
+          <text class="setting-arrow">›</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 关于应用 -->
+  <view class="card about-card">
+    <view class="about-title">关于应用</view>
+    <view class="about-content">
+      <text class="about-text">AI穿搭助手 v1.0</text>
+      <text class="about-desc">基于人工智能的智能穿搭推荐应用，帮助您打造完美搭配。</text>
+    </view>
+  </view>
+</view>
+
+<!-- 身材信息弹窗 -->
+<view class="modal" wx:if="{{showBodyModal}}" bindtap="hideBodyInfoModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-title">身材信息</view>
+    <view class="input-group">
+      <text class="input-label">身高 (cm)</text>
+      <input class="input" type="number" placeholder="请输入身高" 
+             value="{{userHeight}}" bindinput="onHeightInput" />
+    </view>
+    <view class="input-group">
+      <text class="input-label">体重 (kg)</text>
+      <input class="input" type="number" placeholder="请输入体重" 
+             value="{{userWeight}}" bindinput="onWeightInput" />
+    </view>
+    <view class="modal-buttons">
+      <button class="btn btn-outline" bindtap="hideBodyInfoModal">取消</button>
+      <button class="btn" bindtap="saveBodyInfo">保存</button>
+    </view>
+  </view>
+</view>
+
+<!-- 性别偏好弹窗 -->
+<view class="modal" wx:if="{{showGenderModal}}" bindtap="hideGenderModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-title">性别偏好</view>
+    <view class="gender-options">
+      <view class="gender-option {{genderMode === 'female' ? 'active' : ''}}" 
+            bindtap="selectGender" data-gender="female">
+        <text class="gender-icon">👩</text>
+        <text class="gender-text">女装</text>
+      </view>
+      <view class="gender-option {{genderMode === 'male' ? 'active' : ''}}" 
+            bindtap="selectGender" data-gender="male">
+        <text class="gender-icon">👨</text>
+        <text class="gender-text">男装</text>
+      </view>
+    </view>
+    <button class="btn" bindtap="hideGenderModal">确定</button>
+  </view>
+</view>

@@ -1,0 +1,282 @@
+<view class="container">
+  <!-- 用户信息头部 -->
+  <view class="profile-header" wx:if="{{hasLogin}}">
+    <view class="user-avatar">
+      <image class="avatar-image" src="{{userInfo.avatarUrl}}" mode="aspectFill" />
+    </view>
+    <view class="user-info">
+      <text class="username">{{userInfo.nickName}}</text>
+      <text class="user-desc">AI穿搭达人</text>
+    </view>
+    <view class="user-stats">
+      <view class="stat-item">
+        <text class="stat-number">{{totalAnalysis}}</text>
+        <text class="stat-label">分析次数</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-number">{{favoriteCount}}</text>
+        <text class="stat-label">收藏搭配</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 未登录状态 -->
+  <view class="login-prompt" wx:if="{{!hasLogin}}">
+    <view class="prompt-icon">👤</view>
+    <text class="prompt-text">请先登录以查看个人信息</text>
+    <button class="btn" bindtap="navigateToLogin">立即登录</button>
+  </view>
+
+  <!-- 我的信息管理 -->
+  <view class="user-info-section" wx:if="{{hasLogin}}">
+    <view class="user-info-management">
+      <view class="info-title">👤 我的信息</view>
+      
+      <!-- 性别设置 -->
+      <view class="card menu-card">
+        <view class="menu-item">
+          <view class="menu-icon">{{genderMode === 'female' ? '👩' : '👨'}}</view>
+          <view class="menu-content">
+            <text class="menu-title">性别设置</text>
+            <text class="menu-desc">当前：{{genderMode === 'female' ? '女性' : '男性'}}</text>
+          </view>
+          <view class="gender-switch" bindtap="switchGender">
+            <text class="switch-btn {{genderMode === 'female' ? 'active' : ''}}">女</text>
+            <text class="switch-btn {{genderMode === 'male' ? 'active' : ''}}">男</text>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 身材信息 -->
+      <view class="card menu-card" bindtap="openSettings">
+        <view class="menu-item">
+          <view class="menu-icon">📏</view>
+          <view class="menu-content">
+            <text class="menu-title">身材信息</text>
+            <text class="menu-desc">{{genderMode === 'female' ? '女性' : '男性'}}身材 - 身高：{{userHeight || '未设置'}}cm，体重：{{userWeight || '未设置'}}kg</text>
+          </view>
+          <text class="menu-arrow">›</text>
+        </view>
+      </view>
+      
+      <!-- 衣橱管理 -->
+      <view class="card menu-card" bindtap="openWardrobe">
+        <view class="menu-item">
+          <view class="menu-icon">👗</view>
+          <view class="menu-content">
+            <text class="menu-title">衣橱管理</text>
+            <text class="menu-desc">管理我的服装单品</text>
+          </view>
+          <view class="menu-badge" wx:if="{{getTotalClothingCount() > 0}}">{{getTotalClothingCount()}}</view>
+          <text class="menu-arrow">›</text>
+        </view>
+      </view>
+      
+      <!-- 我的收藏 -->
+      <view class="card menu-card" bindtap="viewFavorites">
+        <view class="menu-item">
+          <view class="menu-icon">❤️</view>
+          <view class="menu-content">
+            <text class="menu-title">我的收藏</text>
+            <text class="menu-desc">收藏的搭配方案</text>
+          </view>
+          <view class="menu-badge" wx:if="{{favoriteOutfits && favoriteOutfits.length > 0}}">{{favoriteOutfits.length}}</view>
+          <text class="menu-arrow">›</text>
+        </view>
+      </view>
+      
+    </view>
+
+
+
+    <!-- 分析历史 -->
+    <view class="card menu-card" bindtap="viewHistory">
+      <view class="menu-item">
+        <view class="menu-icon">📊</view>
+        <view class="menu-content">
+          <text class="menu-title">分析历史</text>
+          <text class="menu-desc">查看历史分析记录</text>
+        </view>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+
+
+  <!-- 快速功能 -->
+  <view class="quick-actions" wx:if="{{hasLogin}}">
+    <view class="action-title">快速功能</view>
+    <view class="actions-grid">
+      <view class="action-item" bindtap="quickColorAnalysis">
+        <view class="action-icon">🎨</view>
+        <text class="action-name">色彩分析</text>
+      </view>
+
+      <view class="action-item" bindtap="quickPreference">
+        <view class="action-icon">✨</view>
+        <text class="action-name">偏好搭配</text>
+      </view>
+      <view class="action-item" bindtap="shareApp">
+        <view class="action-icon">📤</view>
+        <text class="action-name">分享应用</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 关于与帮助 -->
+  <view class="card about-section">
+    <view class="about-title">关于与帮助</view>
+    <view class="about-list">
+      <view class="about-item" bindtap="showHelp">
+        <text class="about-icon">❓</text>
+        <text class="about-text">使用帮助</text>
+        <text class="about-arrow">›</text>
+      </view>
+      <view class="about-item" bindtap="showPrivacy">
+        <text class="about-icon">🔒</text>
+        <text class="about-text">隐私政策</text>
+        <text class="about-arrow">›</text>
+      </view>
+      <view class="about-item" bindtap="contactUs">
+        <text class="about-icon">📞</text>
+        <text class="about-text">联系我们</text>
+        <text class="about-arrow">›</text>
+      </view>
+      <view class="about-item" bindtap="showVersion">
+        <text class="about-icon">ℹ️</text>
+        <text class="about-text">版本信息</text>
+        <text class="about-version">v1.0</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-section" wx:if="{{hasLogin}}">
+    <button class="btn btn-outline logout-btn" bindtap="logout">退出登录</button>
+  </view>
+</view>
+
+<!-- 设置弹窗 -->
+<view class="modal" wx:if="{{showSettingsModal}}" bindtap="hideSettingsModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-title">个人设置</view>
+    
+    <!-- 身材信息 -->
+    <view class="setting-section">
+      <text class="setting-label">身材信息</text>
+      <view class="setting-row">
+        <text class="setting-text">身高：</text>
+        <input class="setting-input" type="number" placeholder="cm" 
+               value="{{userHeight}}" bindinput="onHeightInput" />
+      </view>
+      <view class="setting-row">
+        <text class="setting-text">体重：</text>
+        <input class="setting-input" type="number" placeholder="kg" 
+               value="{{userWeight}}" bindinput="onWeightInput" />
+      </view>
+    </view>
+    
+
+    
+    <view class="modal-buttons">
+      <button class="btn btn-outline" bindtap="hideSettingsModal">取消</button>
+      <button class="btn" bindtap="saveSettings">保存</button>
+    </view>
+  </view>
+</view>
+
+<!-- 衣橱管理弹窗 -->
+<view class="modal" wx:if="{{showWardrobeModal}}" bindtap="hideWardrobeModal">
+  <view class="modal-content wardrobe-modal" catchtap="stopPropagation">
+    <view class="modal-title">衣橱管理</view>
+    
+    <!-- 分类选择 -->
+    <view class="category-section">
+      <text class="section-title">选择分类</text>
+      <view class="category-tabs">
+        <view class="category-tab {{currentCategory === 'tops' ? 'active' : ''}}" bindtap="selectCategory" data-category="tops" data-title="上衣">
+          <text class="tab-icon">👕</text>
+          <text class="tab-text">上衣</text>
+        </view>
+        <view class="category-tab {{currentCategory === 'bottoms' ? 'active' : ''}}" bindtap="selectCategory" data-category="bottoms" data-title="下装">
+          <text class="tab-icon">👖</text>
+          <text class="tab-text">下装</text>
+        </view>
+        <view class="category-tab {{currentCategory === 'shoes' ? 'active' : ''}}" bindtap="selectCategory" data-category="shoes" data-title="鞋子">
+          <text class="tab-icon">👟</text>
+          <text class="tab-text">鞋子</text>
+        </view>
+        <view class="category-tab {{currentCategory === 'accessories' ? 'active' : ''}}" bindtap="selectCategory" data-category="accessories" data-title="配饰">
+          <text class="tab-icon">👜</text>
+          <text class="tab-text">配饰</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 添加新单品 -->
+    <view class="add-item-section" wx:if="{{currentCategory}}">
+      <view class="add-item-header">
+        <text class="section-title">添加{{categoryTitle}}</text>
+      </view>
+      <view class="add-item-form">
+        <input class="item-input" placeholder="例如：酒红色T恤" 
+               value="{{newItemName}}" bindinput="onNewItemInput" />
+        <button class="add-btn" bindtap="addNewItem">添加</button>
+      </view>
+    </view>
+    
+    <!-- 现有单品列表 -->
+    <view class="items-section">
+      <text class="section-title">现有单品 ({{wardrobeData[currentCategory] ? wardrobeData[currentCategory].length : 0}}件)</text>
+      <view class="items-list" wx:if="{{wardrobeData[currentCategory] && wardrobeData[currentCategory].length > 0}}">
+        <view class="item-card" wx:for="{{wardrobeData[currentCategory]}}" wx:key="*this">
+          <text class="item-name">{{item}}</text>
+          <view class="item-actions">
+            <text class="edit-btn" bindtap="editItem" data-index="{{index}}">编辑</text>
+            <text class="delete-btn" bindtap="deleteItem" data-index="{{index}}">删除</text>
+          </view>
+        </view>
+      </view>
+      <view class="empty-state" wx:else>
+        <text class="empty-text">暂无{{categoryTitle}}单品</text>
+        <text class="empty-desc">点击上方添加您的第一件单品</text>
+      </view>
+    </view>
+    
+
+    
+    <view class="modal-buttons">
+      <button class="btn btn-outline" bindtap="hideWardrobeModal">取消</button>
+      <button class="btn" bindtap="saveWardrobe">保存</button>
+    </view>
+  </view>
+</view>
+
+<!-- 统计详情弹窗 -->
+<view class="modal" wx:if="{{showStatsModal}}" bindtap="hideStatsModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-title">使用统计</view>
+    <view class="stats-detail">
+      <view class="stats-grid">
+        <view class="stat-card">
+          <text class="stat-value">{{totalAnalysis}}</text>
+          <text class="stat-name">总分析次数</text>
+        </view>
+        <view class="stat-card">
+          <text class="stat-value">{{dailyCallCount}}</text>
+          <text class="stat-name">今日使用</text>
+        </view>
+        <view class="stat-card">
+          <text class="stat-value">{{favoriteCount}}</text>
+          <text class="stat-name">收藏搭配</text>
+        </view>
+        <view class="stat-card">
+          <text class="stat-value">{{loginDays}}</text>
+          <text class="stat-name">使用天数</text>
+        </view>
+      </view>
+    </view>
+    <button class="btn" bindtap="hideStatsModal">关闭</button>
+  </view>
+</view>

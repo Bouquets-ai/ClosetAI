@@ -1,0 +1,395 @@
+/* 登录页面样式 */
+.login-header {
+  text-align: center;
+  padding: 80rpx 0 60rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  margin: -20rpx -20rpx 40rpx;
+  border-radius: 0 0 40rpx 40rpx;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20rpx;
+}
+
+.logo-icon {
+  font-size: 80rpx;
+  margin-right: 20rpx;
+}
+
+.logo-text {
+  font-size: 48rpx;
+  font-weight: 700;
+}
+
+.welcome-text {
+  font-size: 28rpx;
+  opacity: 0.9;
+}
+
+/* 登录卡片 */
+.login-card {
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+}
+
+.login-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 40rpx;
+  color: #333;
+}
+
+.login-methods {
+  margin-bottom: 40rpx;
+}
+
+.wechat-login {
+  width: 100%;
+  background: linear-gradient(135deg, #07c160 0%, #1aad19 100%);
+  color: #fff;
+  border: none;
+  border-radius: 50rpx;
+  padding: 32rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+}
+
+.login-icon {
+  font-size: 36rpx;
+}
+
+/* 用户信息 */
+.user-info {
+  display: flex;
+  align-items: center;
+  background: #f8f8f8;
+  border-radius: 20rpx;
+  padding: 30rpx;
+}
+
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.nickname {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.login-status {
+  font-size: 24rpx;
+  color: #07c160;
+  background: rgba(7, 193, 96, 0.1);
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+}
+
+.logout-btn {
+  margin: 0;
+  padding: 16rpx 32rpx;
+  font-size: 28rpx;
+}
+
+/* 登录说明 */
+.login-desc {
+  text-align: center;
+}
+
+.desc-text {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 30rpx;
+  display: block;
+}
+
+.feature-list {
+  text-align: left;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding: 16rpx 20rpx;
+  background: #f8f8f8;
+  border-radius: 12rpx;
+}
+
+.feature-icon {
+  font-size: 32rpx;
+  margin-right: 16rpx;
+  width: 40rpx;
+  text-align: center;
+}
+
+.feature-text {
+  font-size: 28rpx;
+  color: #666;
+}
+
+/* 使用统计 */
+.stats-card {
+  padding: 30rpx;
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+}
+
+.stats-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 30rpx;
+  color: #333;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20rpx;
+}
+
+.stat-item {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 16rpx;
+  padding: 30rpx 20rpx;
+}
+
+.stat-number {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #333;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #666;
+}
+
+/* 个人设置 */
+.settings-card {
+  padding: 30rpx;
+}
+
+.settings-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  margin-bottom: 30rpx;
+  color: #333;
+}
+
+.settings-list {
+  background: #f8f8f8;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx;
+  background: #fff;
+  border-bottom: 2rpx solid #f0f0f0;
+  transition: all 0.3s ease;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-item:active {
+  background: #f8f8f8;
+}
+
+.setting-info {
+  display: flex;
+  align-items: center;
+}
+
+.setting-icon {
+  font-size: 32rpx;
+  margin-right: 16rpx;
+  width: 40rpx;
+  text-align: center;
+}
+
+.setting-name {
+  font-size: 30rpx;
+  color: #333;
+}
+
+.setting-value {
+  display: flex;
+  align-items: center;
+}
+
+.setting-text {
+  font-size: 28rpx;
+  color: #999;
+  margin-right: 12rpx;
+}
+
+.setting-arrow {
+  font-size: 32rpx;
+  color: #ccc;
+}
+
+/* 关于应用 */
+.about-card {
+  padding: 30rpx;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.about-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  margin-bottom: 20rpx;
+  color: #333;
+}
+
+.about-content {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 12rpx;
+  padding: 30rpx;
+}
+
+.about-text {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.about-desc {
+  font-size: 26rpx;
+  line-height: 1.6;
+  color: #666;
+}
+
+/* 弹窗样式 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin: 0 40rpx;
+  width: calc(100% - 80rpx);
+  max-width: 600rpx;
+}
+
+.modal-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 40rpx;
+  color: #333;
+}
+
+.input-group {
+  margin-bottom: 30rpx;
+}
+
+.input-label {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 40rpx;
+}
+
+.modal-buttons .btn {
+  flex: 1;
+  margin: 0;
+}
+
+/* 性别选择 */
+.gender-options {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 40rpx;
+}
+
+.gender-option {
+  flex: 1;
+  text-align: center;
+  padding: 40rpx 20rpx;
+  background: #f8f8f8;
+  border-radius: 16rpx;
+  border: 3rpx solid transparent;
+  transition: all 0.3s ease;
+}
+
+.gender-option.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border-color: #667eea;
+}
+
+.gender-option:active {
+  transform: scale(0.95);
+}
+
+.gender-icon {
+  font-size: 48rpx;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.gender-text {
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+/* 响应式设计 */
+@media (max-width: 600rpx) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .stat-item {
+    padding: 24rpx 16rpx;
+  }
+  
+  .stat-number {
+    font-size: 36rpx;
+  }
+}

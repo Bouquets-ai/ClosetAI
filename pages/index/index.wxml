@@ -1,0 +1,191 @@
+<view class="container">
+  <!-- 头部区域 -->
+  <view class="header">
+    <view class="title">不会穿搭</view>
+    <!-- 信息展示区域 -->
+     <view class="info-container">
+       <!-- 主要信息条 -->
+       <view class="main-info-bar">
+         <view class="info-section date-section">
+           <view class="info-icon">📅</view>
+           <view class="info-content">
+             <view class="info-title">今日</view>
+             <view class="info-text">{{currentDate}}</view>
+           </view>
+         </view>
+         
+         <view class="info-section weather-section" wx:if="{{weather}}">
+           <view class="info-icon">{{weather.icon}}</view>
+           <view class="info-content">
+             <view class="info-title">{{weather.city}}</view>
+             <view class="info-text">{{weather.temperature}}°C {{weather.description}}</view>
+           </view>
+         </view>
+       </view>
+       
+       <!-- 一言展示 -->
+       <view class="hitokoto-bar">
+         <view class="hitokoto-icon">💭</view>
+         <view class="hitokoto-text">{{hitokoto || '获取一言中...'}}</view>
+       </view>
+       
+       <!-- AI使用情况 -->
+       <view class="ai-usage-bar">
+         <view class="usage-icon">🤖</view>
+         <view class="usage-text">今日AI剩余 {{maxDailyCalls - dailyCallCount}}/{{maxDailyCalls}} 次</view>
+       </view>
+     </view>
+    
+    <!-- 性别切换 -->
+    <view class="gender-switch">
+      <view class="gender-option male {{genderMode === 'male' ? 'active' : ''}}" 
+            bindtap="switchGender" data-gender="male">
+        男生
+      </view>
+      <view class="gender-option female {{genderMode === 'female' ? 'active' : ''}}" 
+            bindtap="switchGender" data-gender="female">
+        女生
+      </view>
+    </view>
+  </view>
+
+  <!-- 风格选择区域 -->
+  <view class="style-section">
+    <view class="section-title">{{genderMode === 'female' ? '女生风格' : '男生风格'}}</view>
+    <view class="style-grid">
+      <view class="style-btn {{genderMode}} {{(genderMode === 'female' ? selectedFemaleStyle : selectedMaleStyle) === item.name ? 'active' : ''}}" 
+            wx:for="{{genderMode === 'female' ? femaleStyles : maleStyles}}" 
+            wx:key="key" 
+            bindtap="selectStyle" 
+            data-style="{{item.name}}">
+        <text class="style-text">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 色彩搭配选择区域 -->
+  <view class="color-section">
+    <view class="section-title">色彩搭配</view>
+    <view class="color-grid">
+      <view class="color-btn {{genderMode}} {{selectedColorScheme === item.name ? 'active' : ''}}" 
+            wx:for="{{colorSchemes}}" 
+            wx:key="key" 
+            bindtap="selectColorScheme" 
+            data-scheme="{{item.key}}">
+        <text class="color-text">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 个人偏好快速搭配 -->
+  <view class="card preference-card" wx:if="{{hasLogin}}">
+    <view class="subtitle">今日推荐搭配</view>
+    
+    <!-- 两个生成按钮 -->
+    <view class="generate-buttons">
+      <view class="generate-btn wardrobe-btn {{wardrobeGenerating ? 'generating' : ''}}" bindtap="generateWithWardrobe">
+        <text class="btn-icon">👔</text>
+        <text class="btn-text">{{wardrobeGenerating ? '生成中...' : '智能衣橱搭配'}}</text>
+        <text class="btn-desc">基于现有衣物推荐</text>
+      </view>
+      
+      <view class="generate-btn style-btn {{styleGenerating ? 'generating' : ''}}" bindtap="generateWithStyle">
+        <text class="btn-icon">✨</text>
+        <text class="btn-text">{{styleGenerating ? '生成中...' : '时尚灵感搭配'}}</text>
+        <text class="btn-desc">探索新的穿搭风格</text>
+      </view>
+    </view>
+    
+    <!-- AI生成进度条 -->
+    <view class="progress-container" wx:if="{{isGenerating}}">
+      <view class="progress-title">AI正在生成搭配方案...</view>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{progressPercent}}%"></view>
+      </view>
+      <view class="progress-text">{{progressText}}</view>
+    </view>
+    
+    <!-- 随机搭配结果 -->
+    <view class="random-outfits" wx:if="{{randomOutfits.length > 0}}">
+      <view class="outfit-item" wx:for="{{randomOutfits}}" wx:key="index">
+        <view class="outfit-header">
+          <view class="outfit-title">搭配方案 {{index + 1}}</view>
+          <view class="outfit-actions">
+            <view class="action-btn" bindtap="favoriteOutfit" data-index="{{index}}">
+              <text class="action-icon">{{item.isFavorite ? '❤️' : '🤍'}}</text>
+              <text class="action-text">{{item.isFavorite ? '已收藏' : '收藏'}}</text>
+            </view>
+          </view>
+          <view class="outfit-weather" wx:if="{{weather}}">
+            <text class="weather-tag">{{weather.temperature}}°C {{weather.description}}</text>
+          </view>
+        </view>
+        <view class="outfit-content">{{item.outfit}}</view>
+        
+        <!-- 穿搭图片展示 -->
+        <view class="outfit-images" wx:if="{{item.images && item.images.length > 0}}">
+          <view class="images-title">📸 搭配参考</view>
+          <scroll-view class="images-scroll" scroll-x="true">
+            <view class="image-item" wx:for="{{item.images}}" wx:key="*this" wx:for-item="image">
+              <image class="outfit-image" src="{{image.url}}" mode="aspectFill" bindtap="previewImage" data-url="{{image.url}}" data-urls="{{item.images}}" />
+              <view class="image-desc">{{image.desc}}</view>
+            </view>
+          </scroll-view>
+        </view>
+        
+        <view class="outfit-explanation">
+          <view class="explanation-section">
+            <view class="explanation-title">🎨 主要颜色</view>
+            <view class="color-palette">
+              <view class="color-item" wx:for="{{item.colors}}" wx:key="*this" wx:for-item="color">
+                <view class="color-circle" style="background-color: {{color.hex}}"></view>
+                <view class="color-name">{{color.name}}</view>
+              </view>
+            </view>
+          </view>
+          <view class="explanation-section">
+            <view class="explanation-title">💡 搭配理由</view>
+            <view class="explanation-text">{{item.reason}}</view>
+          </view>
+          <view class="explanation-section">
+            <view class="explanation-title">🎯 适合场合</view>
+            <view class="explanation-text">{{item.occasion}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+
+
+
+
+
+
+  <!-- 未登录提示 -->
+  <view class="card login-prompt" wx:if="{{!hasLogin}}">
+    <view class="login-text">请先登录以使用完整功能</view>
+    <button class="btn" bindtap="navigateToLogin">立即登录</button>
+  </view>
+</view>
+
+<!-- 身材信息弹窗 -->
+<view class="modal" wx:if="{{showBodyModal}}" bindtap="hideBodyInfoModal">
+  <view class="modal-content" catchtap="stopPropagation">
+    <view class="modal-title">身材信息</view>
+    <view class="input-group">
+      <text class="input-label">身高 (cm)</text>
+      <input class="input" type="number" placeholder="请输入身高" 
+             value="{{userHeight}}" bindinput="onHeightInput" />
+    </view>
+    <view class="input-group">
+      <text class="input-label">体重 (kg)</text>
+      <input class="input" type="number" placeholder="请输入体重" 
+             value="{{userWeight}}" bindinput="onWeightInput" />
+    </view>
+    <view class="modal-buttons">
+      <button class="btn btn-outline" bindtap="hideBodyInfoModal">取消</button>
+      <button class="btn" bindtap="saveBodyInfo">保存</button>
+    </view>
+  </view>
+</view>
